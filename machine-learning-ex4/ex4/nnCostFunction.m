@@ -73,15 +73,33 @@ h = sigmoid(Theta2*a2')';
 J = ((1/m) * sum(sum(-(y==(1:num_labels)) .* log(h) - (1-(y==(1:num_labels))) .* log(1-h)))) + ((lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2))));
 
 
+% Compute Backpropagation
+for t = 1:m
+% Step 1:
+	a_1 = X(t,:)';
 
+	z_2 = Theta1 * a_1;
+	a_2 = sigmoid(z_2);
+	% add bias element
+	a_2 = [1 ; a_2];
 
+	z_3 = Theta2 * a_2;
+	a_3 = sigmoid(z_3);
 
+% Step 2:
+	delta_3 = a_3 - (y(t) == (1:num_labels)');
 
+% Step 3:
+	delta_2 = (Theta2(:,2:end)'*delta_3) .* sigmoidGradient(z_2);
 
+% Step 4:
+	Theta1_grad += delta_2 * a_1';
+	Theta2_grad += delta_3 * a_2';
 
-
-
-
+end
+% Step 5:
+	Theta1_grad = Theta1_grad ./ m + (lambda/m) .* [zeros(size(Theta1,1),1) Theta1(:,2:end)];
+	Theta2_grad = Theta2_grad ./ m + (lambda/m) .* [zeros(size(Theta2,1),1) Theta2(:,2:end)];
 
 % -------------------------------------------------------------
 
