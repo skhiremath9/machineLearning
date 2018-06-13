@@ -24,7 +24,7 @@ sigma = 0.3;
 %
 
 x1 = [1 2 1]; x2 = [0 4 -1];
-prevPredictError = -1;
+prevPredictError = realmax();
 for C_train = [0.01 0.03 0.1 0.3 1 3 10 30]
 	for sigma_train = [0.01 0.03 0.1 0.3 1 3 10 30]
 		model= svmTrain(X, y, C_train, @(x1, x2) gaussianKernel(x1, x2, sigma_train));
